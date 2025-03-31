@@ -64,8 +64,8 @@ function median(numbers) {
     }
     return (numbers[mid - 1] + numbers[mid]) / 2;
 }
-console.log(findMedian([3, 7, 2, 9, 1]));  //kq: 3
-console.log(findMedian([3, 7, 2, 9, 1, 4])); //kq: 3.5
+console.log(median([3, 7, 2, 9, 1]));  //kq: 3
+console.log(median([3, 7, 2, 9, 1, 4])); //kq: 3.5
 
 
 //1.9 Write a program that takes a string as input and returns the number of words in the string
@@ -79,7 +79,7 @@ console.log(countWords("Hello world!"));  // Output: 2
 
 //1.10 Write a program that takes a list of strings as input and returns the number of strings that contain the letter 'a'.
 function countStringsWithA(strings) {
-   return string.filter(str => str.includes('a')).length; 
+   return strings.filter(str => str.includes('a')).length; 
 }
 console.log(countStringsWithA(["apple", "banana", "kiwi"]));  
 // Output: 3 ("apple", "banana")

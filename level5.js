@@ -1,120 +1,105 @@
 // 5.1 reverses
 
-function reversesForEach(arr) {
-    let arrReverses = [];
-    arr.forEach((el) => {
-      arrReverses.unshift(el);
-    });
-    console.log(arrReverses);
-  }
-  
-  function reversesReduce(arr) {
-    let arrReverses = [];
-    return arr.reduce((prev, curr) => {
-      console.log("đây là prev :" + prev);
-      console.log("đây là curr :" + curr);
-      return [curr, ...prev];
-    }, []);
-  }
-  //   let arr = [1, 2, 3, 4, 5];
-  //   console.log(reversesReduce(arr));
+function reverseArrayReduce(arr) {
+  return arr.reduce((acc, item) => [item, ...acc], []);
+}
+
+console.log(reverseArrayReduce([1, 2, 3, 4, 5])); // Output: [5, 4, 3, 2, 1]
+
+
   
   // 5.2 chunk
   
-  function chunk(arr, k) {
-    let arrChunk = [];
-    for (let i = 0; i < arr.length; i++) {
-      arrChunk.push(arr.slice(i, i + k));
-    }
-  }
-  
-  // let arr = [1, 2, 3, 4, 5];
-  // let k = 2;
-  // console.log(chunk(arr));
+  function chunk(array, size) {
+    return array.reduce((acc, item, index) => {
+        if (index % size === 0) {
+            acc.push([]);
+        }
+        acc[acc.length - 1].push(item);
+        return acc;
+    }, []);
+}
+
+console.log(chunk(['a', 'b', 'c', 'd'], 2)); // [['a', 'b'], ['c', 'd']]
+console.log(chunk(['a', 'b', 'c', 'd'], 3)); // [['a', 'b', 'c'], ['d']]
+
   
   //  5.3 uniq: Cho một mảng đầu vào, viết một function để loại bỏ các phần tử bị lặp trong mảng.
   // Ví dụ [1, 2, 3, 2, 4] 👉 [1, 2, 3, 4]
   
-  function uniq(arr) {
-    let newarr = new Set(arr);
-    let uniq = Array.from(newarr);
-    return uniq;
-  }
-  
-  let arr = [1, 2, 3, 2, 4];
-  uniq(arr);
+  function uniq(array) {
+    return [...new Set(array)];
+}
+
+console.log(uniq([1, 2, 3, 2, 4])); // 👉 [1, 2, 3, 4]
+console.log(uniq(['a', 'b', 'a', 'c'])); // 👉 ['a', 'b', 'c']
+
   //5.4 uniq ArrayObject: Giống Uniq nhưng mở rộng cho 1 collection
   // [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }, { 'y': 2, 'x': 1 }]
   
-  function uniqObjects(arr) {
-    const seen = new Set();
-  
-    return arr.filter((item) => {
-      const sortedItem = Object.keys(item)
-        .sort()
-        .reduce((obj, key) => {
-          obj[key] = item[key];
-          console.log(obj);
-          return obj;
-        }, {});
-  
-      const jsonItem = JSON.stringify(sortedItem);
-  
-      if (seen.has(jsonItem)) {
+  function uniqObjects(array) {
+    let seen = new Set();
+    return array.filter(obj => {             
+        let key = JSON.stringify(Object.entries(obj).sort());          
+        if (!seen.has(key)) {
+            seen.add(key);
+            return true;
+        }
         return false;
-      }
-  
-      seen.add(jsonItem);
-      return true;
     });
-  }
-  
-  const arrObj = [
-    { x: 1, y: 2 },
-    { x: 2, y: 1 },
-    { y: 2, x: 1 },
-  ];
-  
-  const result = uniqObjects(arrObj);
-  console.log(result);
+}
+//Dùng Object.entries(obj).sort() để sắp xếp key theo thứ tự, giúp chuẩn hóa object.
+
+//Chuyển thành chuỗi bằng JSON.stringify().
+
+//Dùng Set để lưu lại các chuỗi duy nhất.
+console.log(uniqObjects([
+    { 'x': 1, 'y': 2 }, 
+    { 'x': 2, 'y': 1 }, 
+    { 'y': 2, 'x': 1 }
+])); 
+// 👉 [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }]
+
   
   // 5.5 Group by: Cho đầu vào là 1 collection ( array of object ),
   // Viết một function để trả ra 1 OBJECT mới chứa dữ liệu được group theo trường chỉ định.
   
-  function groupBy(collection, key) {
-    return collection.reduce((result, item) => {
-      const keyValue = item[key];
-      // console.log(item[key]);
-      if (!result[keyValue]) {
-        result[keyValue] = [];
-        // console.log(result[keyValue]);
-      }
-      result[keyValue].push(item);
-      return result;
+  function groupBy(array, key) {
+    return array.reduce((result, item) => {
+        let groupKey = item[key]; // Lấy giá trị của key chỉ định
+
+        if (!result[groupKey]) {
+            result[groupKey] = []; // Nếu chưa có nhóm này thì tạo mảng mới
+        }
+
+        result[groupKey].push(item); // Thêm object vào nhóm tương ứng
+        return result;
     }, {});
-  }
-  
-  const collection = [
-    { a: 1, b: 2 },
-    { a: 1, b: 3 },
-    { a: 2, b: 2 },
-  ];
-  console.log(groupBy(collection, "a"));
+}
+
+// Test case
+const collect = [{a: 1, b: 2}, {a: 1, b: 3}, {a: 2, b: 2}];
+
+console.log(groupBy(collect, 'a'));
+// Output: {1: [{a: 1, b: 2}, {a: 1, b: 3}], 2: [{a: 2, b: 2}]}
+
+console.log(groupBy(collect, 'b'));
+// Output: {2: [{a: 1, b: 2}, {a: 2, b: 2}], 3: [{a: 1, b: 3}]}
+
   
   // 5.6 TrimAll: Viết function loại bỏ tất cả khoảng trắng đầu và cuối của một chuỗi bất kỳ, nếu có khoảng trắng ở giữa chuỗi đó thì chỉ giữ lại một khoảng trắng.
   // VD:
   // “    hello     world    “ 👉 “hello world"
   // “   I    am    good      “ 👉 “I am good”
   
-  function TrimAll(str) {
-    let arrStr = str.trim(); // loại bỏ khỏng trống 2 đầu.
-    let newArr = arrStr.split(" ");
-    let filterWord = newArr.filter((word) => word.length > 0);
-    return filterWord.join(" ");
-  }
-  
-  let str = "    hello     world    ";
-  TrimAll(str);
+  function trimAll(str) {
+    return str.trim().replace(/\s+/g, ' ');
+}
+
+// Test case
+console.log(trimAll("    hello     world    ")); // 👉 "hello world"
+console.log(trimAll("   I    am    good      ")); // 👉 "I am good"
+
   
   // 5.7 MapKey: Cho 1 mảng các key, vào 1 mảng các object , Viết một function để trả ra một mảng các object theo thứ tự mảng các key. ( Yêu cầu dùng hàm map )
   // Ví dụ
@@ -122,50 +107,63 @@ function reversesForEach(arr) {
   // collections = [{a: 1, b: 1, c: 2, d: 4, e: 5}, {a: 2, b:1, c: 5, d: 4, e: 5}, {d: 4, e: 5, a: 22, b:11, c: 51, }]
   // 👉 [{b: 1, a: 1, c: 2}, {b: 1, a: 2, c: 5}, {b: 11, a: 22, c: 51}]
   
-  function mapKey(keys, objects) {
-  
-    return objects.map((obj) => {
-      const sortedObj = {};
-      keys.forEach((key) => {
-        if (obj.hasOwnProperty(key)) {
-
-          sortedObj[key] = obj[key]; 
-        }
-      });
-      return sortedObj; 
+  function mapKey(keys, collections) {
+    return collections.map(obj => {
+        return keys.reduce((result, key) => {
+            if (obj.hasOwnProperty(key)) {
+                result[key] = obj[key]; // Thêm key vào object mới theo thứ tự keys
+            }
+            return result;
+        }, {});
     });
-  }
-  keys = ["b", "a", "c"];
-  objects = [
+}
+
+// Test case
+const keys = ['b', 'a', 'c'];
+const collections = [
     { a: 1, b: 1, c: 2, d: 4, e: 5 },
     { a: 2, b: 1, c: 5, d: 4, e: 5 },
-    { d: 4, e: 5, a: 22, b: 11, c: 51 },
-  ];
-  console.log(mapKey(keys, objects));
+    { d: 4, e: 5, a: 22, b: 11, c: 51 }
+];
+
+console.log(mapKey(keys, collections));
+/*
+Output:
+[
+  { b: 1, a: 1, c: 2 },
+  { b: 1, a: 2, c: 5 },
+  { b: 11, a: 22, c: 51 }
+]
+*/
   
   // 5.8 Switch Order: Viết function để thay đổi thứ tự order của các object.
-  function switchOrder(id, neword) {
-    let arr = [
-      { id: 10, order: 0 },
-      { id: 12, order: 1 },
-      { id: 9, order: 2 },
-      { id: 11, order: 3 },
-    ];
-    let targetIdx = arr.findIndex((el) => el.id === id);
-  
-    if (targetIdx === -1) {
-      return arr;
-    }
-  
-    let targetObj = arr[targetIdx];
-  
-    arr.splice(targetIdx, 1);
-  
-    arr.splice(neword, 0, { ...targetObj, order: neword });
-  
-    return arr.map((obj, index) => ({ ...obj, order: index }));
-  }
-  console.log(switchOrder(9, 1));
+  function switchOrder(id, newOrder, arr) {
+    // Tìm index của object có id cần đổi
+    const currentIndex = arr.findIndex(obj => obj.id === id);
+    if (currentIndex === -1) return arr; // Không tìm thấy id, trả về mảng không thay đổi
+
+    // Lấy object cần đổi và xóa khỏi mảng
+    const [movedItem] = arr.splice(currentIndex, 1);
+
+    // Chèn object vào vị trí mới
+    arr.splice(newOrder, 0, movedItem);
+
+    // Cập nhật lại order cho tất cả object trong mảng
+    arr.forEach((obj, index) => obj.order = index);
+
+    return arr;
+}
+
+// Test case
+let arr = [
+    { id: 10, order: 0 },
+    { id: 12, order: 1 },
+    { id: 9, order: 2 },
+    { id: 11, order: 3 }
+];
+
+console.log(switchOrder(9, 1, arr));
+
   
   // 5.9 SumAll: Viết function để tính tổng giá trị của các key của các phần tử con trong mảng bất kỳ:
   // Ví dụ:
@@ -174,26 +172,23 @@ function reversesForEach(arr) {
   // Đầu vào là một mảng các object và các phần tử trong object không cố định.
   
   function sumAll(arr) {
-    return arr.reduce((accumulator, curr) => {
-      Object.keys(curr).forEach((key) => {
-        let value = Number(curr[key]);
-        if (accumulator[key]) {
-          accumulator[key] += value;
-          console.log(key + ": " + accumulator[key]);
-        } else { 
-          accumulator[key] = value;
-          console.log(key + ": " + accumulator[key]);
+    return arr.reduce((acc, obj) => {
+        for (let key in obj) {
+            let value = parseFloat(obj[key]); // Chuyển đổi giá trị về số nếu là chuỗi số
+            if (!isNaN(value)) { // Chỉ cộng nếu là số hợp lệ
+                acc[key] = (acc[key] || 0) + value;
+            }
         }
-      });
-      return accumulator;
+        return acc;
     }, {});
-  }
-  
-  // let arr = [
-  //   { a: 2, b: 10 },
-  //   { a: 12, c: 11 },
-  //   { a: 8, b: 14, d: 20 },
-  //   { a: "8" },
-  // ];
-  
-  // console.log(sumAll(arr));
+}
+
+// Test case
+let arrA = [
+    { a: 2, b: 10 },
+    { a: 12, c: 11 },
+    { a: 8, b: 14, d: 20 },
+    { a: '8' }
+];
+
+console.log(sumAll(arrA)); 

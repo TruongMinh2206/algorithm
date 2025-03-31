@@ -30,9 +30,9 @@ function TemplateString(templatePath, params, outputPath) {
 const templatePath = path.join(__dirname, 'index.html');
 const outputPath = path.join(__dirname, 'output.html');
 const params = { 
-    title: 'bai 5.10', 
+    title: 'Search of skill', 
     pageTitle: 'Home page', 
-    content: 'Đầu ra: một file mới với nội dung là template và các params được truyền vào'
+    content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, consectetur'
 };
 
 TemplateString(templatePath, params, outputPath);

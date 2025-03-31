@@ -63,5 +63,5 @@ function maxSubarraySum(arr) {
     return maxSum;
 }
 console.log(maxSubarraySum([-2, 1, -3, 4, -1, 2, 1, -5, 4])); // Output: 6 (4 + -1 + 2 + 1)
-onsole.log(maxSubarraySum([-2, -3, 4, -1, -2, 1, 5, -3])); // Output: 7 (4 + -1 + -2 + 1 + 5)
+console.log(maxSubarraySum([-2, -3, 4, -1, -2, 1, 5, -3])); // Output: 7 (4 + -1 + -2 + 1 + 5)
 

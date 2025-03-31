@@ -94,31 +94,31 @@ let inputStrings = [
 
 console.log(sortByDistinctWords(inputStrings));
 
-//4.9 Viết một chương trình lấy một danh sách các số nguyên làm đầu vào và trả về độ dài của dãy số con tăng dài nhất, với ràng buộc bổ sung là
+//4.9 Viết một chương trình lấy một danh sách các số nguyên làm đầu vào và trả về độ dài của dãy số con tăng dài nhất, 
+// với ràng buộc bổ sung là
 //  không có hai phần tử liền kề nào trong dãy số con có thể khác nhau quá 1. ( Khuyến khích dùng reduce )
 
 function longestConstrainedSubsequence(nums) {
     if (nums.length === 0) return 0;
-    
-    let maxLen = 1;
-    let currentLen = 1;
-    
-    nums.reduce((prev, curr) => {
-        if (Math.abs(curr - prev) <= 1 && curr >= prev) {
-            currentLen++;
-            maxLen = Math.max(maxLen, currentLen);
-        } else {
-            currentLen = 1;
-        }
-        return curr;
-    });
-    
-    return maxLen;
+
+    return nums.reduce(
+        ([maxLen, currentLen, prev], curr) => {
+            if (Math.abs(curr - prev) <= 1 && curr >= prev) {
+                currentLen++;
+                maxLen = Math.max(maxLen, currentLen);
+            } else {
+                currentLen = 1;
+            }
+            return [maxLen, currentLen, curr];
+        },
+        [1, 1, nums[0]] // Giá trị khởi tạo: maxLen = 1, currentLen = 1, phần tử đầu tiên
+    )[0]; // Trả về maxLen
 }
 
-console.log(longestConstrainedSubsequence([1, 2, 3, 2, 3, 4, 5, 6])); // Output: 6
+// Test cases
 console.log(longestConstrainedSubsequence([10, 11, 12, 10, 11, 10, 9, 10])); // Output: 4
 console.log(longestConstrainedSubsequence([5, 6, 7, 3, 4, 5, 6, 7, 8, 6])); // Output: 6
+
 
 //4.10 Write a program that takes a list of strings as input and returns the two strings with the largest overlap of substrings,
 //  where the substrings must be at least k characters long (where k is a parameter to the function).
@@ -154,7 +154,7 @@ function findLargestOverlap(strings, k) {
     return bestPair;
 }
 
-console.log(findLargestOverlap(["abcdef", "cdefgh", "xyzabc", "defghi"], 3)); // Output: ["abcdef", "cdefgh"]
+console.log(findLargestOverlap(["abcdef", "cdefgh", "xyzabc", "defzzz"], 3)); // Output: ["abcdef", "cdefgh"]
 
 
 

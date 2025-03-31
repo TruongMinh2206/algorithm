@@ -6,7 +6,7 @@ function findSecondLargest(numbers) {
     return numbers.length > 1 ? numbers[1] : null;
 }
 //Output: VD: [70, 11, 20, 4, 100] 👉 11
-
+console.log(findSecondLargest([70, 11, 20, 4, 100]))
 //3.2 Write a program that takes a list of integers as input and returns the maximum difference between any two elements in the list.
 function maxDifference(arr) {
     if (arr.length < 2) return 0;
